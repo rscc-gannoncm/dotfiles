@@ -6,6 +6,12 @@
 
 [alias]
   pulls = !bash -c 'git stash && git pull && git stash pop'
+  soft = !bash -c 'git reset --soft HEAD~1'
+  hard = !bash -c 'git reset --hard'
+  pf = !bash -c 'git push --force-with-lease' -
+  cb = !bash -c 'git checkout -b $1' -
+  co = !bash -c 'git checkout $1' -
+  alias = ! git config --list | grep alias
 
 [includeIf "gitdir/i:~/.config/"]
   path = ~/.config/dotfiles/dotfiles/configs/.gitconfig_oss

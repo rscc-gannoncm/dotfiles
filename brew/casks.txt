@@ -17,6 +17,11 @@ docker
 licecap
 http-toolkit
 fork
-hyper
 font-hack-nerd-font
 openmtp
+discord
+obs
+openlens
+arduino-ide
+cursur
+windsurf

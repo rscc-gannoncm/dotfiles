@@ -1,30 +1,22 @@
 #!/bin/bash
 
 export CODEBASE=$HOME/codebase
-
-# -=-= Custom =-=-
-alias personal="cd ${CODEBASE}/personal"
-alias work="cd ${CODEBASE}/work"
+#
+# CUSTOM
+# 
+alias github="cd ${CODEBASE}/github"
 alias dl="cd ~/Downloads"
 alias dc="docker-compose"
-
-# -=-= ZSH =-=-
+alias temp="cd ~/temp"
+# 
+# 
+# ZSH
+# 
 alias zshconfig="vim ~/.zshrc"
-
-# -=-= Java =-=-
-alias java11='export JAVA_HOME=${JAVA_11_HOME}'
-alias java17='export JAVA_HOME=${JAVA_17_HOME}'
-
-alias python_3.8="brew unlink python@3.9 && brew link python@3.8"
-alias python_3.9="brew unlink python@3.8 && brew link python@3.9"
-
-# -=-= GO =-=-
-alias go1.18="brew unlink go@1.19 && brew link go@1.18"
-alias go1.19="brew unlink go@1.18 && brew link go@1.19"
-alias gop="cd ${GOPATH}/src/github.com"
-
-# -=-= IntelliJ =-=-
-INTELLIJ_VERSION_FOLDER=IntelliJIdea2021.1
+# 
+# IntelliJ
+# 
+INTELLIJ_VERSION_FOLDER=IdeaIC2024.3
 alias ij-cache="cd ~/Library/Caches/JetBrains/${INTELLIJ_VERSION_FOLDER}"
 alias ij-pref="cd ~/Library/Preferences/JetBrains/${INTELLIJ_VERSION_FOLDER}"
 alias ij-plug="cd ~/Library/Application\ Support/JetBrains/${INTELLIJ_VERSION_FOLDER}"

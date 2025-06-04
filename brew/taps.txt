@@ -3,3 +3,6 @@
 # =========================================================================================
 ZachiNachshon/tap
 dimentium/autoraise
+homebrew/cask-fonts
+homebrew/services
+homebrew/cask-versions

@@ -1,0 +1,9 @@
+---
+description: Global Cursor AI Rules
+globs: 
+alwaysApply: false
+---
+# Global Cursor AI Rules
+
+## Development Tools
+@import ./rules/tools/git.md

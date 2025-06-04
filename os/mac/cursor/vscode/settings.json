@@ -1,0 +1,35 @@
+{
+    "workbench.colorCustomizations": {
+    "list.activeSelectionBackground": "#4d4d4d",
+    "list.activeSelectionForeground": "#ffffff",
+    "list.inactiveSelectionBackground": "#0961d5",
+    "list.inactiveSelectionForeground": "#e0e0e0",
+    "list.hoverBackground": "#303033",
+    "list.highlightForeground": "#18a3ff"
+    },
+    "workbench.settings.openDefaultKeybindings": true,
+    "files.autoSave": "afterDelay",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontSize": 15,
+    "window.zoomLevel": 1,
+    "editor.stickyScroll.enabled": true,
+    "workbench.colorTheme": "Default Dark+",
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "workbench.startupEditor": "none",
+    "github.copilot.editor.enableAutoCompletions": true,
+    "editor.tabSize": 2,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "cursor.composer.shouldAllowCustomModes": true
+}

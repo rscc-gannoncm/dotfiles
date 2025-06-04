@@ -64,3 +64,6 @@ set hlsearch
 
 " Set the commands to save in history default number is 20.
 set history=1000
+
+" Use fzf on VIM
+set rtp+=${HOMEBREW_PREFIX_PATH}/opt/fzf

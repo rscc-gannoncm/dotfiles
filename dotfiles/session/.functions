@@ -71,3 +71,126 @@ kill_intellij() {
     echo "IntelliJ IDEA is not running."
   fi
 }
+
+#######################################
+# Kill any running process by name
+# Globals:
+#   None
+# Arguments:
+#   None
+# Usage:
+#   pkill <name>
+#######################################
+pkill() { 
+  local name=$1
+  local pids=$(ps -ef -o pid | awk -v prefix="${name}" '$8 " " $9 ~ "^" prefix {print $2}')
+
+  if [[ -n ${pids} ]]; then
+    echo "Killing processes. name: ${name}"
+    # Iterate over each PID and kill it
+    echo "${pids}" | while read -r pid; do
+      echo "Killing PID: ${pid}"
+      kill -9 "${pid}"
+    done
+
+    echo "Killed all processes."
+  else
+    echo "Process is not running. name: ${name}"
+  fi
+}
+
+pidgrep() {
+  local name=$1
+  ps -ef | awk -v name="${name}" '$0 ~ name && $8 !~ /awk/ {print $2, $8}'
+}
+
+brew_no_auto_update() {
+  HOMEBREW_NO_AUTO_UPDATE=1 brew "$@"
+}
+
+# Function to display the version and paths of each language
+lang() {
+  echo -e "\n=== Language Versions & Paths ===\n"
+
+  # Java
+  echo -e "Java:"
+  if command -v java &>/dev/null; then
+    java_version=$(java -version 2>&1 | head -n 1 | awk -F '"' '{print $2}')
+    java_path=$(which java)
+    echo -e "  Version: $java_version"
+    echo -e "  Path:    $java_path"
+  else
+    echo -e "  Java not installed"
+  fi
+  echo
+
+  # Python
+  echo -e "Python:"
+  if command -v python3 &>/dev/null; then
+    python_version=$(python3 --version 2>&1)
+    python_path=$(which python3)
+    echo -e "  Version: $python_version"
+    echo -e "  Path:    $python_path"
+  else
+    echo -e "  Python not installed"
+  fi
+  echo
+
+  # Golang
+  echo -e "Golang:"
+  if command -v go &>/dev/null; then
+    go_version=$(go version | awk '{print $3}')
+    go_path=$(which go)
+    echo -e "  Version: $go_version"
+    echo -e "  Path:    $go_path"
+  else
+    echo -e "  Go not installed"
+  fi
+  echo
+
+  # Node.js
+  echo -e "Node.js:"
+  if command -v node &>/dev/null; then
+    node_version=$(node -v)
+    node_path=$(which node)
+    echo -e "  Version: $node_version"
+    echo -e "  Path:    $node_path"
+  else
+    echo -e "  Node.js not installed"
+  fi
+  echo
+
+  # Rust
+  echo -e "Rust:"
+  if command -v rustc &>/dev/null; then
+    rust_version=$(rustc --version | awk '{print $2}')
+    rust_path=$(which rustc)
+    echo -e "  Version: $rust_version"
+    echo -e "  Path:    $rust_path"
+  else
+    echo -e "  Rust not installed"
+  fi
+  echo
+
+  # Scala
+  echo -e "Scala:"
+  if command -v scala &>/dev/null; then
+    scala_version=$(scala --version 2>&1 | awk '{print $5}')
+    scala_path=$(which scala)
+    echo -e "  Version: $scala_version"
+    echo -e "  Path:    $scala_path"
+  else
+    echo -e "  Scala not installed"
+  fi
+  echo
+}
+
+pwdc() {
+  local pwd=$(pwd)
+  if [[ -n "${pwd}" ]]; then
+    echo "${pwd}" | pbcopy
+    echo "Copied current directory to clipboard: ${pwd}"
+  else
+    echo "Failed to copy current directory to clipboard."
+  fi
+}

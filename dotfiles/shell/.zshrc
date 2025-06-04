@@ -14,109 +14,89 @@
 # The following script will source a reload_session.sh script under 
 # current shell session without creating a nested shell session. 
 ############################################################################# 
-DOTFILES_CLI_INSTALL_PATH=${DOTFILES_CLI_INSTALL_PATH:-${HOME}/.config/dotfiles-cli} 
-DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH=${DOTFILES_CLI_INSTALL_PATH}/reload_session.sh 
  
-if [[ -e ${DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH} ]]; then 
-  export LOGGER_SILENT=True 
-  source ${DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH} 
+# Homebrew use different folder paths for Intel/ARM architecture: 
+# Intel - /usr/local 
+# ARM   - /opt/homebrew 
+HOMEBREW_PREFIX_PATH='' 
+ARCH=$(uname -m | tr '[:upper:]' '[:lower:]') 
+if [[ ${ARCH} == *x86_64* ]]; then 
+  HOMEBREW_PREFIX_PATH=/usr/local 
+elif [[ ${ARCH} == *arm* ]]; then 
+  HOMEBREW_PREFIX_PATH=/opt/homebrew 
+  eval $(/opt/homebrew/bin/brew shellenv) 
 else 
-  echo -e 'Dotfiles CLI is not installed, cannot load plugins/reload session. path: $DOTFILES_CLI_INSTALL_PATH' 
-fi
+  echo -e 'Architecture is not supported by dotfiles-cli. name: arm64' 
+fi 
+ 
+if [[ -n ${HOMEBREW_PREFIX_PATH} ]]; then 
+  dotfiles_cli_install_path=$(command -v dotfiles) 
+  # Path resolution to support Homebrew installation 
+  if [[ ${dotfiles_cli_install_path} == ${HOMEBREW_PREFIX_PATH}/bin/dotfiles ]]; then 
+    homebrew_dotfiles_cli_install_path=$(dirname $(readlink ${dotfiles_cli_install_path})) 
+    homebrew_dotfiles_cli_install_path=${homebrew_dotfiles_cli_install_path/bin/libexec} 
+    homebrew_dotfiles_cli_install_path=${homebrew_dotfiles_cli_install_path/..\/Cellar/${HOMEBREW_PREFIX_PATH}/Cellar} 
+    DOTFILES_CLI_INSTALL_PATH=${homebrew_dotfiles_cli_install_path} 
+  fi 
+  
+  DOTFILES_CLI_INSTALL_PATH=${DOTFILES_CLI_INSTALL_PATH:-${HOME}/.config/dotfiles-cli} 
+  DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH=${DOTFILES_CLI_INSTALL_PATH}/reload_session.sh 
+  
+  if [[ -e ${DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH} ]]; then 
+    export LOGGER_SILENT=True 
+    source ${DOTFILES_CLI_RELOAD_SESSION_SCRIPT_PATH} 
+  else 
+    echo -e 'Dotfiles CLI is not installed, cannot load plugins/reload session. path: /opt/homebrew/Cellar/dotfiles-cli/0.8.0/libexec' 
+  fi 
+fi 
+ 
 
 ###########################################################################
 #                            ZSH Configuration
 ###########################################################################
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
-
-# This line is mandatory to prevent agnoster theme to set prompt as <username@machine-name>
-DEFAULT_USER="$(whoami)"
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  zsh-syntax-highlighting
-)
-
-# zsh-syntax-highlighting
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red') # To have commands starting with `rm -rf` in red:
-
-# Path to your oh-my-zsh installation.
-export ZSH=${HOME}/.oh-my-zsh
-source ${ZSH}/oh-my-zsh.sh
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/configs/zsh.sh
 
 ###########################################################################
-#                            User configuration
+#                            USER configuration
 ###########################################################################
+# 
+# JAVA
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/java.sh
+# 
+# PYTHON
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/python.sh
+# 
+# GO
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/go.sh
+# 
+# RUST
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/rust.sh
+# 
+# NODE
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/node.sh
+# 
+# SCALA
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/lang/scala.sh
+# 
+# CONFIG
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/configs/starship.sh
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/configs/fzf.sh
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/configs/lsd.sh
+# 
+# UTILITIES
+# 
+source ${DOTFILES_REPO_LOCAL_PATH}/dotfiles/shell/utils/metals.sh
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Load fuzzy finder settings (https://github.com/junegunn/fzf)
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-
-# Load Starship settings (https://github.com/starship/starship)
-if [[ -e ${DOTFILES_REPO_LOCAL_PATH} ]]; then
-  # DOTFILES_REPO_LOCAL_PATH is exported from reload_session.sh
-  export STARSHIP_CONFIG="${DOTFILES_REPO_LOCAL_PATH}/dotfiles/configs/starship.toml"
-  eval "$(starship init zsh)"
-fi
+###########################################################################
+#                                 PATH
+###########################################################################
+# /opt/homebrew/bin must precede all other PATH items for brew installed packages would be used first (such as git client)
+export PATH=${PATH}:${HOME}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:${POETRY_HOME}/bin:${CARGO_HOME}/bin:${JAVA_HOME}/bin:${SCALA_HOME}/bin:${GOROOT}/bin:${GOPATH}/bin:${RANCHER_HOME}/bin:${COURSIER_HOME}/bin
