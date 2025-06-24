@@ -29,6 +29,10 @@ DOTFILES_REPO_LOCAL_PATH=${DOTFILES_REPO_LOCAL_PATH:-"${CONFIG_FOLDER_PATH}/dotf
     ln -sfn "$file" "${CURSOR_AGENT_HOME}/$(basename "$file")"
   done
 
+  # Link the dotfiles Cursor rules to ~/.cursor/rules and ~/.cursor/rules.mdc
+  ln -sfn "${DOTFILES_REPO_LOCAL_PATH}/ai/cursor/rules" "${CURSOR_AGENT_HOME}/rules"
+  ln -sfn "${DOTFILES_REPO_LOCAL_PATH}/ai/cursor/rules.mdc" "${CURSOR_AGENT_HOME}/rules.mdc"
+
   # Install Cursor extensions
   cat "${DOTFILES_REPO_LOCAL_PATH}/os/mac/cursor/vscode/${CURSOR_EXTENSIONS_LIST_FILE_NAME}" | xargs -n 1 cursor --install-extension > /dev/null 2>&1
 }
